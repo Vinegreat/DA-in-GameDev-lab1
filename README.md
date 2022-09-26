@@ -44,7 +44,9 @@ print('Hello world')
 При помощи инструмента Jupiter Notebook мной была написана примитивная однострочная программа, выводящая надпись "Hello World" Скриншот результата выполнения программы:
 ![image](https://user-images.githubusercontent.com/114157138/192205361-2066cb92-4c73-4446-b2e4-aaf461493a58.png)
 
-Код программы :print('Hello world')
+Код программы :
+print('Hello World')
+
 
 
 ## Выводы
