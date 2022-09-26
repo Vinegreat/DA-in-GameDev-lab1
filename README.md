@@ -48,8 +48,6 @@ print('Hello world')
 print('Hello World')
 
 В юнити мною был создан 2D проект , куда был прикреплен скрипт HelloWorld.cs , его я прикрепил к главной камере 
-P.s код ниже 
-
 
 using System.Collections;
 using System.Collections.Generic;
@@ -73,6 +71,17 @@ public class HelloWorld : MonoBehaviour
 
 
 ## Задание 2
+В разделе «Ход работы» пошагово выполнить каждый пункт с описанием и примером реализации задачи по теме лабораторной работы.
+
+В ходе выполнения следующего задания я полностью разобрал код и даже модифицировал, но для начала я переписал его из методических указаний:
+
+![image](https://user-images.githubusercontent.com/114157138/192214563-1fb8b7b9-d363-430e-ad51-c3a99b855bf7.png)
+
+
+
+
+При выполнении кода поялвяется данный график:
+![image](https://user-images.githubusercontent.com/114157138/192214652-bec186ee-4ae8-4913-9a2e-6a0d4c2c8a5f.png)
 
 
 
