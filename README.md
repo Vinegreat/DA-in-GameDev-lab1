@@ -47,6 +47,32 @@ print('Hello world')
 Код программы :
 print('Hello World')
 
+В юнити мною был создан 2D проект , куда был прикреплен скрипт HelloWorld.cs , его я прикрепил к главной камере 
+P.s код ниже 
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class HelloWorld : MonoBehaviour
+{
+    // Start is called before the first frame update
+    void Start()
+    {
+     Debug.Log("Hello world");   
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+}
+![image](https://user-images.githubusercontent.com/114157138/192213376-926d9af1-7368-4680-a0cd-29df4d12fb52.png)
+
+
+## Задание 2
+
+
 
 
 ## Выводы
