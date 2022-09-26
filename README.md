@@ -49,6 +49,8 @@ print('Hello World')
 
 В юнити мною был создан 2D проект , куда был прикреплен скрипт HelloWorld.cs , его я прикрепил к главной камере 
 P.s код ниже 
+
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
