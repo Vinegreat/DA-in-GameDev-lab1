@@ -1,14 +1,15 @@
 # АНАЛИЗ ДАННЫХ И ИСКУССТВЕННЫЙ ИНТЕЛЛЕКТ [in GameDev]
-Отчет по лабораторной работе #1 выполнил(а):
+Отчет по лабораторной работе #2 выполнил(а):
 - Куц Евгений Александрович
-- НМТ-213901
+- НМТ213511
+
 Отметка о выполнении заданий (заполняется студентом):
 
 | Задание | Выполнение | Баллы |
-| ------ | ------ | ------ |
+| —--— | —--— | —--— |
 | Задание 1 | * | 60 |
-| Задание 2 | * | 20 |
-| Задание 3 | * | 20 |
+| Задание 2 | # | 20 |
+| Задание 3 | # | 20 |
 
 знак "*" - задание выполнено; знак "#" - задание не выполнено;
 
@@ -20,108 +21,107 @@
 [![N|Solid](https://cldup.com/dTxpPi9lDf.thumb.png)](https://nodesource.com/products/nsolid)
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
-Код программы:
-print('Hello world')
-
-Структура отчета
-
-- Данные о работе: название работы, фио, группа, выполненные задания.
-- Цель работы.
-- Задание 1.
-- Код реализации выполнения задания. Визуализация результатов выполнения (если применимо).
-- Задание 2.
-- Код реализации выполнения задания. Визуализация результатов выполнения (если применимо).
-- Задание 3.
-- Код реализации выполнения задания. Визуализация результатов выполнения (если применимо).
-- Выводы.
-- ✨Magic ✨
 
 ## Цель работы
-Ознакомиться с основными операторами зыка Python на примере реализации линейной регрессии.
+Ознакомиться с программными средствами для организции передачи данных между инструментами google, Python и Unity.
 
 ## Задание 1
-### Написать программы Hello World на Python и Unity
-При помощи инструмента Jupiter Notebook мной была написана примитивная однострочная программа, выводящая надпись "Hello World" Скриншот результата выполнения программы:
-![image](https://user-images.githubusercontent.com/114157138/192205361-2066cb92-4c73-4446-b2e4-aaf461493a58.png)
+### Реализовать совместную работу и передачу данных в связке Python - Google-Sheets – Unity.
+В начале выполнения работы я создала проект в Google Cloud, где подключила API для работы с Google Sheets и создала сервисный аккаунт, через который данные отправляются в гугл-таблицу.
 
-Код программы :
-print('Hello World')
+!картиночка
 
-В юнити мною был создан 2D проект , куда был прикреплен скрипт HelloWorld.cs , его я прикрепил к главной камере 
+После настройки передачи данных в таблицу, был написан код на Python, который генерировал случайные числа (подразумевавшие цены), а также рассчитывал инфляцию по этим ценам и загружал их в таблицу (код представлен ниже)
+
+```py
+
+import gspread
+import numpy as np
+gc = gspread.service_account(filename = 'unitydatascience-364716-a19ce910ca41.json')
+sh = gc.open("UnitySheets")
+price = np.random.randint(2000, 10000, 11)
+mon = list(range(1,11))
+i = 0
+while i <= len(mon):
+i += 1
+if 1 == 0:
+continue
+else:
+tempInf = ((price[i-1]-price[i-2])/price[i-2])*100
+tempInf = str(tempInf)
+tempInf = tempInf.replace('.',',')
+sh.sheet1.update(('A' + str(i)), str(i))
+sh.sheet1.update(('B' + str(i)), str(price[i-1]))
+sh.sheet1.update(('C' + str(i)), str(tempInf))
+print(tempInf)
+
+```
+
+Скриншоты результатов в PyCharm и Google таблицах прилагаются:
+
+!картиночка
+!картиночка
+
+Далее в Юнити был создан 3D проект, куда на сцену были добавлены пустой объект и два пакета с библиотеками и звуками. После этого я написала скрипт, получающий из гугл-таблицы значения и анализирующий их, после чего по сценарию воспроизводящий звук в зависимости от значения инфляции и выводящий значение инфляции (код представлен ниже).
+
+```py
 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
+using SimpleJSON;
 
-public class HelloWorld : MonoBehaviour
+public class NewBehaviourScript : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-     Debug.Log("Hello world");   
-    }
+public AudioClip goodSpeak;
+public AudioClip NormalSpeak;
+public AudioClip BadSpeak;
+private AudioSource selectAudio;
+private Dictionary<string,float> dataSet = new Dictionary<string, float>();
+private bool statusStart = false;
+private int i = 1;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+// Start is called before the first frame update
+void Start()
+{
+StartCoroutine(GoogleSheets());
 }
-![image](https://user-images.githubusercontent.com/114157138/192213376-926d9af1-7368-4680-a0cd-29df4d12fb52.png)
 
+// Update is called once per frame
+void Update()
+{
 
-## Задание 2
-### В разделе «Ход работы» пошагово выполнить каждый пункт с описанием и примером реализации задачи по теме лабораторной работы.
+}
 
-В ходе выполнения следующего задания я полностью разобрал код и даже модифицировал, но для начала я переписал его из методических указаний:
+IEnumerator GoogleSheets()
+{
+UnityWebRequest curentResp = UnityWebRequest.Get("https://sheets.googleapis.com/v4/spreadsheets/1Hh4k1yLxHaXOYZ91YbDJ8okh_ogDMRsV_kM2R5THEug/values/Лист1?key=AIzaSyArFzRfcD7kaCJ0uwtkx8mPgANlECuY2e0");
+yield return curentResp.SendWebRequest();
+string rawResp = curentResp.downloadHandler.text;
+var rawJson = JSON.Parse(rawResp);
+foreach (var itemRawJson in rawJson["values"])
+{
+var parseJson = JSON.Parse(itemRawJson.ToString());
+var selectRow = parseJson[0].AsStringList;
+dataSet.Add(("Mon_" + selectRow[0]), float.Parse(selectRow[2]));
+}
+Debug.Log(dataSet["Mon_1"]);
+}
+}
 
-![image](https://user-images.githubusercontent.com/114157138/192214563-1fb8b7b9-d363-430e-ad51-c3a99b855bf7.png)
+```
+Пустой объект получил набор звуков и к нему был прикреплен написанный скрипт:
 
+!картиночка
 
+Результат запуска сцены:
 
-
-При выполнении кода поялвяется данный график:
-![image](https://user-images.githubusercontent.com/114157138/192214652-bec186ee-4ae8-4913-9a2e-6a0d4c2c8a5f.png)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## Изучить код на Python и ответить на вопросы:
-- Должна ли величина loss стремиться к нулю при изменении исходных данных? Ответьте на вопрос, приведите пример выполнения кода, который подтверждает ваш ответ.
-
-Loss будет = 0 если входной y всегда будет равен y[i]=ax[i]+b Для начала введу некоторое равенство: y{i}=ax{i}+b=y(!). И так, если разность между y(1) и y{i} будет уменьшаться, то loss тоже будет уменьшаться => стремится к нулю. Что бы  доказать это я изменил входные данные так, чтобы разница между ожидаемыми и входными значениями уменьшалась и в итоге была равна нулю. Так же для удобства я установил коэффиценты a и b = 2. Ниже представлен код:
-
-![image](https://user-images.githubusercontent.com/114157138/192274106-2d5cae46-909f-444a-aef0-1e502adca575.png)
-
-
-Вот такой график в Итоге получается : ![image](https://user-images.githubusercontent.com/114157138/192274130-4a1944ce-9349-4f09-b313-60495a4c4842.png)
-
-
-## Какова роль параметра Lr? Ответьте на вопрос, приведите пример выполнения кода, который подтверждает ваш ответ. В качестве эксперимента можете изменить значение параметра.
-
-В результате запуска  программы  считается сумма отклонений y  если бы точки считались по функции, а не были заданы вручную (da,db). a и b получают значение разности самих себя с этими отклонениями, умноженными на коэффицент Lr. Lr - это "ограждающий" коэффицент, не прозволяющим a и b быть равными нулю => функция не обнуляется 
-
-
-
-
+!картиночка
 
 ## Выводы
 
-Абзац умных слов о том, что было сделано и что было узнано.
-В данной работе я начал работать в среде разработки unity мельком познакомился с интерфейсом и т.п 
-так же освежил в памяти процесс написания кода на pytone 
-
-
+В результате выполнения данной работы я научилась работать с программными средствами для организции передачи данных между инструментами google, Python и Unity, и создавать работу в связке этих инструментов.
 
 ## Powered by
 
